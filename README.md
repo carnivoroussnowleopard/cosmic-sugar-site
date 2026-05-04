@@ -65,3 +65,22 @@ npx serve . -l 4173
 - `권한 없음`/404 발생 시: 업로드 루트에 `index.html`이 있는지 확인
 - 배포는 됐는데 JSX가 안 보일 때: 브라우저 콘솔에서 외부 CDN(React/Babel) 차단 여부 확인
 - 캐시 때문에 옛 화면이 보이면: Cloudflare cache purge 또는 하드 리로드
+
+
+## Wrangler로 배포할 때 에러 해결
+
+로그의 `Could not detect a directory containing static files` 에러는 Wrangler가 **정적 파일 디렉토리**를 못 찾을 때 발생합니다.
+이 저장소는 루트(`.`)에 `index.html`, `app.jsx`, `styles.css`가 있으므로 `wrangler.toml`에서 assets 디렉토리를 명시해야 합니다.
+
+```toml
+[assets]
+directory = "."
+```
+
+### 배포 명령
+```bash
+npx wrangler deploy
+```
+
+Cloudflare Pages에서 굳이 `npx wrangler deploy`를 쓸 필요는 없고, Pages의 Git 연동 빌드를 쓰는 경우에는 빌드 커맨드를 비워도 됩니다.
+다만 Workers/Assets 방식으로 배포하려면 현재처럼 `wrangler.toml`이 필요합니다.
