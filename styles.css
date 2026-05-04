@@ -21,6 +21,7 @@ body {
     radial-gradient(circle at 85% 2%, rgba(141, 237, 255, .45), transparent 33%),
     linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bottom) 100%);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 main {
@@ -85,6 +86,21 @@ button {
 button:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255, 121, 190, .3); }
 button.warn { background: linear-gradient(100deg, #2b2038, #1a1227); color: #ff90b0; }
 button.warn:hover { filter: saturate(1.5); }
+
+
+
+.glass {
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.7);
+  background: rgba(255,255,255,.63);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(45, 21, 59, .1);
+}
+
+.small {
+  font-size: .92rem;
+  color: var(--muted);
+}
 
 .hero-card,
 .section {
