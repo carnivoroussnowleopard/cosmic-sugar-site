@@ -3,4 +3,3 @@ compatibility_date = "2026-05-04"
 
 [assets]
 directory = "."
-include = ["index.html", "app.jsx", "styles.css"]

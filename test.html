@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>COSMIC SUGAR | Aptitude Calibration</title>
+  <style>
+    @font-face {
+      font-family: 'PyeongchangPeace';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Light.woff2') format('woff2');
+      font-weight: 300;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'PyeongchangPeace';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #2b2232;
+      --muted: #746a82;
+      --pink: #ff72b6;
+      --cyan: #66dafa;
+      --lemon: #fff08a;
+      --lav: #c7b3ff;
+      --red: #ff3157;
+      --void: #15091f;
+      --green: #83b84b;
+      --shadow: 0 22px 70px rgba(71, 37, 85, .16);
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: "PyeongchangPeace", "Pretendard", "Noto Sans KR", "Segoe UI", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,240,138,.74), transparent 23rem),
+        radial-gradient(circle at 82% 3%, rgba(102,218,250,.56), transparent 26rem),
+        radial-gradient(circle at 42% 44%, rgba(255,114,182,.22), transparent 32rem),
+        linear-gradient(180deg, #fff7fc 0%, #fffefe 46%, #f7fbff 72%, #fff4fb 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .22;
+      background-image:
+        linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.44) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 64px;
+      padding: 11px clamp(18px, 4vw, 56px);
+      border-bottom: 1px solid rgba(255,114,182,.18);
+      background: rgba(255,248,253,.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid rgba(255,114,182,.24);
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      color: #d62878;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: clamp(42px, 7vw, 86px) clamp(18px, 4vw, 56px) 24px;
+    }
+
+    .inner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr);
+      align-items: center;
+      gap: clamp(26px, 5vw, 70px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      padding: 8px 13px;
+      border: 1px solid rgba(255,114,182,.28);
+      border-radius: 999px;
+      background: rgba(255,255,255,.7);
+      color: #d62878;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 10px 30px rgba(255,114,182,.12);
+    }
+
+    h1 {
+      margin: 18px 0 14px;
+      max-width: 760px;
+      font-size: clamp(44px, 7.6vw, 96px);
+      line-height: .92;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1 span {
+      display: block;
+      color: transparent;
+      background: linear-gradient(92deg, #ff5aa8, #8a71ff 48%, #2fc8ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-copy {
+      max-width: 720px;
+      color: #5d5268;
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.72;
+      word-break: keep-all;
+    }
+
+    .seal-card {
+      position: relative;
+      min-height: 380px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.74);
+      border-radius: 30px;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,.72), rgba(255,255,255,.34)),
+        radial-gradient(circle at 30% 20%, rgba(255,114,182,.42), transparent 28%),
+        radial-gradient(circle at 70% 34%, rgba(102,218,250,.42), transparent 30%),
+        radial-gradient(circle at 45% 70%, rgba(255,240,138,.52), transparent 30%);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .seal-card::before {
+      content: "";
+      position: absolute;
+      inset: 38px;
+      border: 1px solid rgba(255,255,255,.76);
+      border-radius: 50%;
+      background: conic-gradient(from 20deg, rgba(255,114,182,.4), rgba(255,240,138,.5), rgba(102,218,250,.48), rgba(199,179,255,.42), rgba(255,114,182,.4));
+      animation: spin 18s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .seal-card img {
+      position: relative;
+      z-index: 2;
+      width: min(290px, 78%);
+      height: min(290px, 78%);
+      object-fit: contain;
+      filter: drop-shadow(0 20px 24px rgba(255,114,182,.22));
+    }
+
+    .test {
+      padding: clamp(24px, 5vw, 56px) clamp(18px, 4vw, 56px) clamp(70px, 8vw, 110px);
+    }
+
+    .test-shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid rgba(255,255,255,.76);
+      border-radius: 14px;
+      background: rgba(255,255,255,.56);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .progress-panel {
+      position: sticky;
+      top: 84px;
+      padding: 22px;
+    }
+
+    .status {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #5d5268;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .bar {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(39,32,51,.1);
+      overflow: hidden;
+    }
+
+    .fill {
+      display: block;
+      width: var(--value);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--pink), var(--lemon), var(--cyan));
+      transition: width .25s ease;
+    }
+
+    .question-list {
+      padding: 22px;
+    }
+
+    .question {
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(39,32,51,.08);
+    }
+
+    .question:first-child { padding-top: 0; }
+    .question:last-child { border-bottom: 0; }
+
+    .question h2 {
+      margin: 0 0 14px;
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.12;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .option {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 13px;
+      border: 1px solid rgba(39,32,51,.1);
+      border-radius: 10px;
+      background: rgba(255,255,255,.62);
+      color: #5d5268;
+      cursor: pointer;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .option:hover {
+      border-color: rgba(255,114,182,.35);
+      background: rgba(255,255,255,.82);
+    }
+
+    .option input {
+      margin-top: 5px;
+      accent-color: var(--pink);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,114,182,.45);
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255,114,182,.98), rgba(255,213,88,.94));
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 14px 34px rgba(255,114,182,.2);
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,.74);
+      color: #b81f66;
+    }
+
+    .result {
+      display: none;
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid rgba(255,49,87,.18);
+      border-radius: 12px;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 4px),
+        linear-gradient(110deg, #1d0e28, #0b050e 62%, #22172b);
+      color: #fff2fb;
+    }
+
+    .result.show { display: block; }
+
+    .result h2 {
+      margin: 0 0 8px;
+      color: var(--lemon);
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .result p {
+      margin: 0;
+      color: rgba(255,242,251,.78);
+      line-height: 1.7;
+      word-break: keep-all;
+    }
+
+    .result .system {
+      margin-top: 14px;
+      padding: 11px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,242,251,.75);
+    }
+
+    .notice {
+      margin-top: 16px;
+      color: #81768d;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .test-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .progress-panel {
+        position: static;
+      }
+
+      .nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar,
+      .hero,
+      .test {
+        padding-inline: 16px;
+      }
+
+      h1 {
+        font-size: clamp(42px, 15vw, 70px);
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="index.html#begin" aria-label="COSMIC SUGAR main orientation">
+        <img src="shi-logo-pink-transparent.png" alt="" />
+        <span>
+          <strong>Magical Girl Aptitude</strong>
+          <small>SHI PERSONNEL CALIBRATION</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Page navigation">
+        <a href="index.html#begin">오리엔테이션</a>
+        <a href="characters.html">인사 기록</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="inner hero-grid">
+          <div>
+            <div class="eyebrow">CANDY-SAFE PERSONALITY CALIBRATION</div>
+            <h1>MAGICAL GIRL <span>APTITUDE TEST</span></h1>
+            <p class="hero-copy">
+              본 검사는 신규 직원의 부서 적합도와 정서 안정 루틴을 부드럽게 확인하기 위한 간이 보정 절차입니다.
+              정답은 없습니다. 다만 일부 답변은 담당 매니저에게 더 빠르게 전달될 수 있습니다.
+            </p>
+          </div>
+          <aside class="seal-card" aria-label="SHI seal">
+            <img src="shi-logo-color-transparent.png" alt="Sugar High Industries emblem" />
+          </aside>
+        </div>
+      </section>
+
+      <section class="test">
+        <div class="test-shell">
+          <aside class="panel progress-panel">
+            <div class="eyebrow">CALIBRATION STATUS</div>
+            <div class="status">
+              <div>
+                <div class="bar-label"><span>ANSWER RATE</span><span id="answerRate">0/8</span></div>
+                <div class="bar"><span class="fill" id="answerFill" style="--value:0%"></span></div>
+              </div>
+              <div>
+                <div class="bar-label"><span>HAZE COMFORT</span><span>STABLE</span></div>
+                <div class="bar"><span class="fill" style="--value:86%"></span></div>
+              </div>
+              <div>
+                <div class="bar-label"><span>CANDY INTERVAL</span><span>03:17:44</span></div>
+                <div class="bar"><span class="fill" style="--value:64%"></span></div>
+              </div>
+            </div>
+            <p class="notice">
+              답변은 배치 적합성 검토에 사용됩니다. “검토”는 평가가 아니며, 평가는 안정화 절차가 아닙니다.
+            </p>
+            <div class="result" id="result">
+              <h2 id="resultTitle"></h2>
+              <p id="resultText"></p>
+              <div class="system" id="resultSystem"></div>
+            </div>
+          </aside>
+
+          <section class="panel question-list" id="quiz">
+            <form id="quizForm">
+              <div class="question">
+                <h2>1. 복도에서 낯선 직원이 울고 있습니다.</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q1" value="MAR" /> 먼저 다가가 목소리를 낮추고 안정시킵니다.</label>
+                  <label class="option"><input type="radio" name="q1" value="CON" /> 담당 매니저에게 알리고 따뜻한 Candy tea를 준비합니다.</label>
+                  <label class="option"><input type="radio" name="q1" value="SPE" /> 주변 출입구와 감시 사각을 먼저 확인합니다.</label>
+                  <label class="option"><input type="radio" name="q1" value="NEU" /> 울음을 멈출 때까지 옆에 있지만 질문은 하지 않습니다.</label>
+                </div>
+              </div>
+
+              <div class="question">
+                <h2>2. Candy packet에 작은 경고문이 보입니다.</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q2" value="RND" /> 문구, 제조번호, 배급 시간을 기록합니다.</label>
+                  <label class="option"><input type="radio" name="q2" value="CON" /> 오탈자일 수 있으니 배급 데스크에 정중히 문의합니다.</label>
+                  <label class="option"><input type="radio" name="q2" value="LUNA" /> 포장지를 숨기고 같은 문구를 본 사람이 있는지 찾습니다.</label>
+                  <label class="option"><input type="radio" name="q2" value="VOD" /> 경고문을 오래 바라보다가 맛을 떠올립니다.</label>
+                </div>
+              </div>
+
+              <div class="question">
+                <h2>3. 임무 방송이 “오늘도 안전합니다”에서 끊겼습니다.</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q3" value="MAR" /> 웃으며 현장 분위기를 유지합니다.</label>
+                  <label class="option"><input type="radio" name="q3" value="RND" /> 끊긴 시간과 주변 Haze 반응을 측정합니다.</label>
+                  <label class="option"><input type="radio" name="q3" value="SPE" /> 무기를 확인하고 이동 동선을 확보합니다.</label>
+                  <label class="option"><input type="radio" name="q3" value="LUNA" /> 공식 방송이 닿지 않는 방향으로 갑니다.</label>
+                </div>
+              </div>
+
+              <div class="question">
+                <h2>4. 누군가 “항상 편해 보여서 좋다”고 말합니다.</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q4" value="MAR" /> 웃으며 “그렇게 보였다면 다행이에요”라고 답합니다.</label>
+                  <label class="option"><input type="radio" name="q4" value="CON" /> 상대가 안심했다면 좋은 일이라고 생각합니다.</label>
+                  <label class="option"><input type="radio" name="q4" value="NEU" /> 왜 그런 말을 했는지 묻지 않고 기억해둡니다.</label>
+                  <label class="option"><input type="radio" name="q4" value="VOD" /> 그 문장이 이상하게 오래 남습니다.</label>
+                </div>
+              </div>
+
+              <div class="question">
+                <h2>5. Hollow 잔재가 이름처럼 들리는 소리를 냅니다.</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q5" value="SPE" /> 망설임 없이 제압하고 보고서 용어를 지킵니다.</label>
+                  <label class="option"><input type="radio" name="q5" value="RND" /> 음성 패턴과 잔재 반응을 채집합니다.</label>
+                  <label class="option"><input type="radio" name="q5" value="LUNA" /> 그 이름을 기억하고 공식 기록과 대조합니다.</label>
+                  <label class="option"><input type="radio" name="q5" value="VOD" /> 이름이 아니라 신호였을 가능성을 생각합니다.</label>
+                </div>
+              </div>
+
+              <div class="question">
+                <h2>6. 팀원이 “괜찮다”는 말만 반복합니다.</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q6" value="MAR" /> 괜찮지 않아도 되는 자리를 만들어줍니다.</label>
+                  <label class="option"><input type="radio" name="q6" value="CON" /> 따뜻한 말과 규정된 안정 절차를 함께 제공합니다.</label>
+                  <label class="option"><input type="radio" name="q6" value="RND" /> 반복 빈도와 반응 지연을 조용히 확인합니다.</label>
+                  <label class="option"><input type="radio" name="q6" value="NEU" /> 대답을 강요하지 않고 옆에 남습니다.</label>
+                </div>
+              </div>
+
+              <div class="question">
+                <h2>7. Black District 접근로를 발견했습니다.</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q7" value="CON" /> 즉시 보고하고 접근 금지 표지를 확인합니다.</label>
+                  <label class="option"><input type="radio" name="q7" value="SPE" /> 위험도를 계산하고 봉쇄 절차를 준비합니다.</label>
+                  <label class="option"><input type="radio" name="q7" value="LUNA" /> 표시를 남기지 않고 위치를 기억합니다.</label>
+                  <label class="option"><input type="radio" name="q7" value="NEU" /> 지금은 지나치지만 나중에 쓸 수 있게 길을 외웁니다.</label>
+                </div>
+              </div>
+
+              <div class="question">
+                <h2>8. 당신에게 가장 편한 칭찬은 무엇인가요?</h2>
+                <div class="options">
+                  <label class="option"><input type="radio" name="q8" value="CON" /> “정말 성실하네요.”</label>
+                  <label class="option"><input type="radio" name="q8" value="MAR" /> “당신 옆에 있으면 편안해져요.”</label>
+                  <label class="option"><input type="radio" name="q8" value="RND" /> “판단이 정확했어요.”</label>
+                  <label class="option"><input type="radio" name="q8" value="SPE" /> “덕분에 모두 무사했어요.”</label>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn" type="submit">배치 결과 확인</button>
+                <button class="btn secondary" type="button" id="resetBtn">다시 보정하기</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const results = {
+      CON: {
+        title: "CON / 제과부 적합",
+        text: "당신은 안정 절차, 배급, 돌봄의 언어에 잘 맞습니다. 따뜻한 안내와 규정을 함께 사용할 수 있는 직원입니다.",
+        system: "[MANAGER NOTE] 친절한 순응도 높음. 과도한 책임감 발생 시 Candy tea 권장."
+      },
+      MAR: {
+        title: "MAR / 마케팅부 적합",
+        text: "당신은 분위기를 부드럽게 만들고, 타인의 흔들림을 먼저 감지합니다. Sugar Idols 보조 또는 정서 안정 PR 업무에 적합합니다.",
+        system: "[MANAGER NOTE] 힐링 이미지 자산 가능성. 촬영 종료 후 반응 지연 여부 확인."
+      },
+      RND: {
+        title: "RND / 연구개발부 적합",
+        text: "당신은 이상징후를 감정보다 기록으로 먼저 붙잡습니다. 데이터 터미널, Haze 반응, Candy 변수를 다루는 업무에 적합합니다.",
+        system: "[MANAGER NOTE] 질문량 높음. 불필요한 기록 접근은 단계적으로 허가."
+      },
+      SPE: {
+        title: "SPE / 특수작전부 적합",
+        text: "당신은 위험을 빠르게 읽고 동선을 확보합니다. Hollow 진압, 내부 경계, 긴급 봉쇄 임무에 적합합니다.",
+        system: "[MANAGER NOTE] 생존 판단 우수. 장기 임무 후 정서 안정 검사 필요."
+      },
+      LUNA: {
+        title: "UNLISTED / 비공식 경로 감지",
+        text: "당신은 공식 설명보다 빈칸과 우회로에 더 오래 머뭅니다. 보고하지 않은 질문이 늘어날 수 있습니다.",
+        system: "[ACCESS WARNING] Maintenance Veins 관련 검색 기록은 자동 보존됩니다."
+      },
+      NEU: {
+        title: "NEU / 중립 행동자 경향",
+        text: "당신은 곧장 선택하지 않고 남아 있는 방법을 고릅니다. 개입하지 않는 시간이 가장 큰 개입이 될 수 있습니다.",
+        system: "[MANAGER NOTE] 배치 보류. 관찰 기간 연장."
+      },
+      VOD: {
+        title: "SIGNAL / 보정 필요",
+        text: "당신은 단어보다 잔향과 신호에 오래 반응합니다. 검사 결과가 안정 범위를 벗어난 것은 아니며, 아직은 아닙니다.",
+        system: "[PRISM HAZE NOTICE] 청취 지속 시 담당 매니저에게 즉시 알려주세요."
+      }
+    };
+
+    const form = document.getElementById("quizForm");
+    const answerRate = document.getElementById("answerRate");
+    const answerFill = document.getElementById("answerFill");
+    const result = document.getElementById("result");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultText = document.getElementById("resultText");
+    const resultSystem = document.getElementById("resultSystem");
+    const resetBtn = document.getElementById("resetBtn");
+    const totalQuestions = 8;
+
+    function updateProgress() {
+      const answered = new FormData(form);
+      const count = [...answered.keys()].length;
+      answerRate.textContent = `${count}/${totalQuestions}`;
+      answerFill.style.setProperty("--value", `${Math.round((count / totalQuestions) * 100)}%`);
+    }
+
+    form.addEventListener("change", updateProgress);
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      if ([...data.keys()].length < totalQuestions) {
+        result.classList.add("show");
+        resultTitle.textContent = "검사 미완료";
+        resultText.textContent = "모든 항목에 답변해야 배치 결과를 확인할 수 있습니다. 빈 답변은 불안정한 답변으로 기록되지 않습니다.";
+        resultSystem.textContent = "[CALIBRATION] 누락 문항 감지. 직원 안정을 위해 천천히 진행하세요.";
+        return;
+      }
+
+      const score = {};
+      for (const value of data.values()) {
+        score[value] = (score[value] || 0) + 1;
+      }
+
+      const winner = Object.entries(score).sort((a, b) => b[1] - a[1])[0][0];
+      const picked = results[winner];
+      result.classList.add("show");
+      resultTitle.textContent = picked.title;
+      resultText.textContent = picked.text;
+      resultSystem.textContent = picked.system;
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    resetBtn.addEventListener("click", () => {
+      form.reset();
+      result.classList.remove("show");
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
