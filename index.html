@@ -1,1004 +1,191 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>COSMIC SUGAR | Beginner Portal</title>
-  <style>
-    @font-face {
-      font-family: 'PyeongchangPeace';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Light.woff2') format('woff2');
-      font-weight: 300;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'PyeongchangPeace';
-      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-02@1.0/PyeongChangPeace-Bold.woff2') format('woff2');
-      font-weight: 700;
-      font-display: swap;
-    }
-
-    :root {
-      --milk: #fff8fd;
-      --paper: rgba(255,255,255,.72);
-      --paper-strong: rgba(255,255,255,.9);
-      --ink: #2b2232;
-      --muted: #756b82;
-      --pink: #ff72b6;
-      --pink-soft: #ffd7eb;
-      --cyan: #66dafa;
-      --mint: #a6f4dc;
-      --lemon: #fff08a;
-      --lav: #c7b3ff;
-      --red: #ff3157;
-      --void: #15091f;
-      --green: #83b84b;
-      --gold: #a88428;
-      --line: rgba(255,114,182,.26);
-      --shadow: 0 22px 70px rgba(71, 37, 85, .16);
-      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      --sans: "PyeongchangPeace", "Pretendard", "Noto Sans KR", "Segoe UI", system-ui, sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-width: 320px;
-      color: var(--ink);
-      font-family: var(--sans);
-      font-weight: 300;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(255,240,138,.76), transparent 23rem),
-        radial-gradient(circle at 82% 2%, rgba(102,218,250,.58), transparent 27rem),
-        radial-gradient(circle at 35% 42%, rgba(255,114,182,.24), transparent 32rem),
-        linear-gradient(180deg, #fff7fc 0%, #fffefe 48%, #f7fbff 72%, #fff4fb 100%);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: .22;
-      background-image:
-        linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.45) 1px, transparent 1px);
-      background-size: 36px 36px;
-      mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
-    }
-
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 30;
-      pointer-events: none;
-      opacity: .045;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
-
-    a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; }
-
-    .shell {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      min-height: 64px;
-      padding: 11px clamp(18px, 4vw, 56px);
-      border-bottom: 1px solid rgba(255,114,182,.18);
-      background: rgba(255,248,253,.78);
-      backdrop-filter: blur(18px);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .brand img {
-      width: 42px;
-      height: 42px;
-      object-fit: contain;
-      flex: 0 0 auto;
-    }
-
-    .brand strong {
-      display: block;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0;
-    }
-
-    .brand small {
-      display: block;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 800;
-      margin-top: 2px;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 34px;
-      padding: 0 12px;
-      border: 1px solid rgba(255,114,182,.24);
-      border-radius: 999px;
-      background: rgba(255,255,255,.62);
-      color: #d62878;
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-
-    .hero {
-      min-height: calc(100vh - 64px);
-      display: grid;
-      align-items: center;
-      padding: clamp(44px, 7vw, 88px) clamp(18px, 4vw, 56px);
-    }
-
-    .inner {
-      width: min(1180px, 100%);
-      margin: 0 auto;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(310px, .95fr);
-      align-items: center;
-      gap: clamp(28px, 5vw, 76px);
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      width: fit-content;
-      padding: 8px 13px;
-      border: 1px solid rgba(255,114,182,.28);
-      border-radius: 999px;
-      background: rgba(255,255,255,.7);
-      color: #d62878;
-      font-family: var(--mono);
-      font-size: 12px;
-      font-weight: 900;
-      box-shadow: 0 10px 30px rgba(255,114,182,.12);
-    }
-
-    h1 {
-      margin: 18px 0 14px;
-      max-width: 760px;
-      font-size: clamp(48px, 8.2vw, 106px);
-      line-height: .9;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
-    h1 span {
-      display: block;
-      color: transparent;
-      background: linear-gradient(92deg, #ff5aa8, #8a71ff 48%, #2fc8ee);
-      -webkit-background-clip: text;
-      background-clip: text;
-    }
-
-    .hero-copy {
-      max-width: 680px;
-      color: #5d5268;
-      font-size: clamp(17px, 2vw, 21px);
-      line-height: 1.72;
-      word-break: keep-all;
-    }
-
-    .truth-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      max-width: 700px;
-      margin: 24px 0 0;
-    }
-
-    .truth-card {
-      min-height: 92px;
-      padding: 14px;
-      border: 1px solid rgba(39,32,51,.1);
-      border-radius: 8px;
-      background: rgba(255,255,255,.62);
-      backdrop-filter: blur(14px);
-    }
-
-    .truth-card strong {
-      display: block;
-      color: #d62878;
-      font-family: var(--mono);
-      font-size: 11px;
-      margin-bottom: 6px;
-    }
-
-    .truth-card span {
-      display: block;
-      color: #5d5268;
-      font-size: 13px;
-      line-height: 1.45;
-      word-break: keep-all;
-    }
-
-    .cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 28px;
-    }
-
-    .btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: 0 18px;
-      border: 1px solid rgba(255,114,182,.45);
-      border-radius: 999px;
-      background: linear-gradient(135deg, rgba(255,114,182,.98), rgba(255,213,88,.94));
-      color: white;
-      font-weight: 950;
-      box-shadow: 0 14px 34px rgba(255,114,182,.26);
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    .btn.secondary {
-      background: rgba(255,255,255,.76);
-      color: #b81f66;
-    }
-
-    .btn.danger {
-      background: rgba(255,255,255,.68);
-      color: #62576d;
-    }
-
-    .btn.danger:hover span { font-size: 0; }
-    .btn.danger:hover::after {
-      content: "권한 없음";
-      color: var(--red);
-      font-family: var(--mono);
-      font-size: 13px;
-    }
-
-    .seal-card {
-      position: relative;
-      min-height: 520px;
-      border: 1px solid rgba(255,255,255,.74);
-      border-radius: 30px;
-      background:
-        linear-gradient(160deg, rgba(255,255,255,.72), rgba(255,255,255,.34)),
-        radial-gradient(circle at 30% 20%, rgba(255,114,182,.42), transparent 28%),
-        radial-gradient(circle at 70% 34%, rgba(102,218,250,.42), transparent 30%),
-        radial-gradient(circle at 45% 70%, rgba(255,240,138,.52), transparent 30%);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .seal-card::before {
-      content: "";
-      position: absolute;
-      inset: 42px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.76);
-      background: conic-gradient(from 20deg, rgba(255,114,182,.4), rgba(255,240,138,.5), rgba(102,218,250,.48), rgba(199,179,255,.42), rgba(255,114,182,.4));
-      animation: spin 18s linear infinite;
-    }
-
-    .seal-card::after {
-      content: "";
-      position: absolute;
-      inset: 96px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.48);
-      box-shadow: inset 0 0 55px rgba(255,114,182,.18), 0 0 60px rgba(102,218,250,.22);
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .seal-card img {
-      position: absolute;
-      z-index: 3;
-      inset: 50%;
-      width: min(370px, 78%);
-      height: min(370px, 78%);
-      object-fit: contain;
-      transform: translate(-50%, -50%);
-      filter: drop-shadow(0 20px 24px rgba(255,114,182,.22));
-    }
-
-    .seal-card .log-stack {
-      position: absolute;
-      z-index: 4;
-      left: 20px;
-      right: 20px;
-      bottom: 20px;
-    }
-
-    .system-log {
-      display: flex;
-      justify-content: space-between;
-      gap: 14px;
-      margin-top: 8px;
-      padding: 9px 10px;
-      border: 1px solid rgba(39,32,51,.09);
-      border-radius: 8px;
-      background: rgba(255,255,255,.66);
-      color: #51475c;
-      font-family: var(--mono);
-      font-size: 11px;
-      line-height: 1.4;
-      backdrop-filter: blur(12px);
-    }
-
-    .system-log b { color: #d62878; }
-    .system-log.alert, .system-log.alert b { color: var(--red); }
-
-    .portal {
-      padding: 0 clamp(18px, 4vw, 56px) clamp(70px, 8vw, 110px);
-    }
-
-    .portal-shell {
-      width: min(1180px, 100%);
-      margin: 0 auto;
-      border: 1px solid rgba(255,255,255,.72);
-      border-radius: 18px;
-      background: rgba(255,255,255,.38);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-      overflow: hidden;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      padding: 12px;
-      border-bottom: 1px solid rgba(39,32,51,.08);
-      background: rgba(255,255,255,.5);
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .tabs::-webkit-scrollbar { display: none; }
-
-    .tab {
-      flex: 0 0 auto;
-      min-height: 38px;
-      padding: 0 13px;
-      border: 1px solid rgba(255,114,182,.22);
-      border-radius: 999px;
-      background: rgba(255,255,255,.62);
-      color: #675d73;
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .tab.active {
-      border-color: rgba(255,114,182,.54);
-      background: linear-gradient(135deg, rgba(255,114,182,.95), rgba(102,218,250,.88));
-      color: #fff;
-      box-shadow: 0 12px 26px rgba(255,114,182,.18);
-    }
-
-    .panel {
-      display: none;
-      padding: clamp(24px, 4vw, 42px);
-    }
-
-    .panel.active { display: block; }
-
-    .section-title {
-      max-width: 780px;
-      margin-bottom: 26px;
-    }
-
-    .section-title h2 {
-      margin: 10px 0 10px;
-      font-size: clamp(30px, 4vw, 52px);
-      line-height: 1.04;
-      letter-spacing: 0;
-      font-weight: 700;
-    }
-
-    .section-title p {
-      margin: 0;
-      color: #5f5669;
-      font-size: 17px;
-      line-height: 1.72;
-      word-break: keep-all;
-    }
-
-    .grid {
-      display: grid;
-      gap: 14px;
-    }
-
-    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-    .card {
-      position: relative;
-      min-height: 170px;
-      padding: 20px;
-      border: 1px solid rgba(255,255,255,.72);
-      border-radius: 8px;
-      background: var(--paper);
-      box-shadow: 0 16px 44px rgba(71,37,85,.1);
-      overflow: hidden;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 22px 54px rgba(71,37,85,.15);
-      transition: transform .18s ease, box-shadow .18s ease;
-    }
-
-    .card h3 {
-      margin: 0 0 10px;
-      font-size: 22px;
-      letter-spacing: 0;
-    }
-
-    .card p {
-      margin: 0;
-      color: #62586e;
-      line-height: 1.68;
-      word-break: keep-all;
-    }
-
-    .badge {
-      display: inline-flex;
-      margin-bottom: 12px;
-      padding: 6px 9px;
-      border: 1px solid rgba(39,32,51,.12);
-      border-radius: 999px;
-      background: rgba(255,255,255,.58);
-      color: #5b5166;
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 900;
-    }
-
-    .small {
-      margin-top: 14px;
-      color: #81768d;
-      font-family: var(--mono);
-      font-size: 11px;
-      line-height: 1.62;
-    }
-
-    .map {
-      min-height: 420px;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      border-radius: 8px;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,.74), rgba(255,255,255,.38)),
-        linear-gradient(145deg, rgba(255,216,236,.65), rgba(166,244,220,.34));
-    }
-
-    .map-diagram {
-      width: min(760px, 100%);
-      display: grid;
-      gap: 12px;
-      font-family: var(--mono);
-      text-align: center;
-      color: #4f465b;
-    }
-
-    .map-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      align-items: center;
-    }
-
-    .zone {
-      min-height: 88px;
-      display: grid;
-      place-items: center;
-      padding: 12px;
-      border: 1px solid rgba(39,32,51,.1);
-      border-radius: 8px;
-      background: rgba(255,255,255,.62);
-      font-weight: 900;
-    }
-
-    .zone.pink { background: rgba(255,216,236,.78); }
-    .zone.cyan { background: rgba(102,218,250,.34); }
-    .zone.silver { background: rgba(232,230,245,.74); }
-    .zone.black {
-      background: linear-gradient(145deg, #1c0d26, #09050e);
-      color: #f7edf9;
-      border-color: rgba(255,49,87,.26);
-      text-shadow: 1px 0 var(--red), -1px 0 var(--cyan);
-    }
-
-    .route-card {
-      cursor: pointer;
-    }
-
-    .route-card.selected {
-      outline: 2px solid rgba(255,114,182,.58);
-      background: rgba(255,255,255,.88);
-    }
-
-    .route-detail {
-      margin-top: 16px;
-      padding: 20px;
-      border: 1px solid rgba(255,49,87,.18);
-      border-radius: 8px;
-      background: rgba(20,9,30,.88);
-      color: #fff2fb;
-    }
-
-    .route-detail h3 {
-      margin: 0 0 8px;
-      color: var(--lemon);
-    }
-
-    .route-detail p {
-      margin: 0;
-      color: rgba(255,242,251,.78);
-      line-height: 1.7;
-      word-break: keep-all;
-    }
-
-    .character-card {
-      min-height: 250px;
-      background:
-        linear-gradient(160deg, rgba(255,255,255,.72), rgba(255,255,255,.48)),
-        radial-gradient(circle at 24% 18%, var(--aura), transparent 42%);
-    }
-
-    .character-card::after {
-      content: attr(data-secret);
-      position: absolute;
-      left: 16px;
-      right: 16px;
-      bottom: 16px;
-      padding: 10px;
-      border-radius: 8px;
-      background: rgba(20,9,30,.84);
-      color: #f8e7ff;
-      font-family: var(--mono);
-      font-size: 11px;
-      line-height: 1.5;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity .18s ease, transform .18s ease;
-    }
-
-    .character-card:hover::after {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .quote {
-      margin-top: 14px;
-      color: #d62878;
-      font-weight: 950;
-      line-height: 1.55;
-    }
-
-    .spoiler-grid .card {
-      background: rgba(20,9,30,.9);
-      color: #fff2fb;
-      border-color: rgba(255,49,87,.22);
-    }
-
-    .spoiler-grid .card p {
-      color: rgba(255,242,251,.75);
-    }
-
-    .spoiler-grid .badge {
-      background: rgba(255,255,255,.08);
-      color: var(--lemon);
-      border-color: rgba(255,255,255,.16);
-    }
-
-    .glitch-line {
-      margin-top: 24px;
-      padding: 22px;
-      border-radius: 8px;
-      background:
-        repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 4px),
-        linear-gradient(110deg, #1d0e28, #0b050e 62%, #22172b);
-      color: white;
-      font-family: var(--mono);
-      font-size: clamp(18px, 3vw, 34px);
-      font-weight: 900;
-      text-transform: uppercase;
-      text-shadow: 2px 0 var(--red), -2px 0 var(--cyan);
-    }
-
-    footer {
-      padding: 38px clamp(18px, 4vw, 56px) 54px;
-      border-top: 1px solid rgba(39,32,51,.08);
-      background: rgba(255,255,255,.58);
-      color: #5f5669;
-    }
-
-    .footer-inner {
-      width: min(1180px, 100%);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .footer-inner strong {
-      display: block;
-      color: var(--ink);
-      font-size: 20px;
-      margin-bottom: 8px;
-    }
-
-    .fine {
-      font-family: var(--mono);
-      font-size: 11px;
-      line-height: 1.8;
-    }
-
-    @media (max-width: 940px) {
-      .hero-grid,
-      .grid.two,
-      .grid.three,
-      .grid.four,
-      .footer-inner {
-        grid-template-columns: 1fr;
-      }
-
-      .truth-strip {
-        grid-template-columns: 1fr;
-      }
-
-      .seal-card {
-        min-height: 420px;
-      }
-
-      .top-actions {
-        display: none;
-      }
-    }
-
-    @media (max-width: 620px) {
-      .topbar { padding-inline: 16px; }
-      .brand strong { font-size: 13px; }
-      .brand small { font-size: 9px; }
-      h1 { font-size: clamp(44px, 16vw, 72px); }
-      .cta-row, .btn { width: 100%; }
-      .panel { padding: 20px 14px; }
-      .map-row { grid-template-columns: 1fr; }
-      .system-log { display: block; }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>COSMIC SUGAR | Official Introduction</title>
+  <link rel="stylesheet" href="site.css" />
 </head>
 <body>
   <div class="shell">
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="COSMIC SUGAR">
+      <a class="brand" href="index.html#begin" aria-label="COSMIC SUGAR">
         <img src="shi-logo-pink-transparent.png" alt="" />
         <span>
           <strong>COSMIC SUGAR</strong>
-          <small>SHI BEGINNER RECRUITMENT PORTAL</small>
+          <small>SHI PUBLIC ORIENTATION</small>
         </span>
       </a>
-      <div class="top-actions">
-        <span class="status-pill">HAZE: COMFORTABLE</span>
-        <span class="status-pill">CANDY: DISTRIBUTED</span>
-      </div>
+      <nav class="nav" aria-label="Site navigation">
+        <a class="active" href="index.html#begin">소개</a>
+        <a href="world.html">세계관</a>
+        <a href="districts.html">구역</a>
+        <a href="factions.html">세력</a>
+        <a href="characters.html">인물</a>
+        <a href="start.html">시작</a>
+        <a href="test.html">테스트</a>
+        <a href="guide.html">공략</a>
+      </nav>
     </header>
 
-    <main id="top">
+    <main id="begin">
       <section class="hero">
         <div class="inner hero-grid">
           <div>
-            <div class="eyebrow">WELCOME, NEW STAFF / SPOILER-SAFE ENTRY</div>
-            <h1>COSMIC <span>SUGAR</span></h1>
+            <div class="eyebrow">WELCOME TO SUGAR HIGH INDUSTRIES</div>
+            <h1>HUMANITY'S <span>SWEETEST SHIELD</span></h1>
             <p class="hero-copy">
-              Sugar High Industries에 오신 것을 환영합니다. 본 오리엔테이션은 신규 직원이 안전하게
-              도시 생활과 임무 절차에 적응할 수 있도록 구성된 공식 안내입니다.
-              모든 정보는 현재 권한 등급에 맞게 조정되어 있습니다.
+              COSMIC SUGAR는 파스텔 마법소녀 기업 홍보물의 얼굴을 하고 있지만,
+              내부에는 감정 에너지, 캔디 복용, 결계 유지, 기록 공백이 맞물린 심리 생존 RPG입니다.
+              이 사이트는 처음 들어오는 플레이어가 스포일러 없이 세계의 표면을 이해하도록 정리한 공개 안내입니다.
             </p>
-
-            <div class="truth-strip">
-              <div class="truth-card"><strong>FIRST RULE</strong><span>처음부터 모든 진실을 알 필요는 없습니다.</span></div>
-              <div class="truth-card"><strong>TONE</strong><span>무서운 장면보다 너무 친절해서 이상한 장면이 먼저 옵니다.</span></div>
-              <div class="truth-card"><strong>CHOICE</strong><span>회사 순응도, 전복도, 중립도 완전한 정답은 아닙니다.</span></div>
-            </div>
-
             <div class="cta-row">
-              <button class="btn" data-tab-target="start"><span>첫 시나리오 고르기</span></button>
-              <button class="btn secondary" data-tab-target="world"><span>도시 안내 보기</span></button>
-              <a class="btn secondary" href="characters.html"><span>인물 소개 보기</span></a>
-              <a class="btn secondary" href="test.html"><span>적성 검사 시작</span></a>
-              <button class="btn danger" type="button"><span>퇴직자 기록 열람</span></button>
+              <a class="btn primary" href="start.html">처음 시작하기</a>
+              <a class="btn" href="world.html">세계관 보기</a>
+              <a class="btn" href="characters.html">인물 보기</a>
+              <a class="btn danger" href="guide.html">스포일러 공략</a>
             </div>
           </div>
 
           <aside class="seal-card" aria-label="SHI official seal">
             <img src="shi-logo-color-transparent.png" alt="Sugar High Industries emblem" />
-            <div class="log-stack">
-              <div class="system-log"><span>[PUBLIC TRUTH]</span><b>SHI PROTECTS THE WORLD</b></div>
-              <div class="system-log"><span>[CANDY NOTICE]</span><b>STABILITY REQUIRED</b></div>
-              <div class="system-log alert"><span>[RETIREMENT FILE]</span><b>BEGINNER ACCESS DENIED</b></div>
-            </div>
+            <div class="system-log"><span>[PRISM BARRIER]</span><b>STABLE</b></div>
+            <div class="system-log"><span>[CANDY DISTRIBUTION]</span><b>NORMAL</b></div>
+            <div class="system-log alert"><span>[RETIREMENT QUERY]</span><b>MANAGER ONLY</b></div>
           </aside>
         </div>
       </section>
 
-      <section class="portal" id="portal">
-        <div class="portal-shell">
-          <div class="tabs" role="tablist" aria-label="COSMIC SUGAR beginner tabs">
-            <button class="tab active" type="button" data-tab-target="begin">처음 보기</button>
-            <button class="tab" type="button" data-tab-target="world">도시 안내</button>
-            <button class="tab" type="button" data-tab-target="city">도시 지도</button>
-            <button class="tab" type="button" data-tab-target="people">인물/세력</button>
-            <button class="tab" type="button" data-tab-target="start">시작 루트</button>
-            <button class="tab" type="button" data-tab-target="spoiler">기밀 금고</button>
+      <section class="section">
+        <div class="inner">
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">WHAT THIS SITE IS</span>
+              <h2>소개 사이트는 표면을 먼저 보여줍니다.</h2>
+            </div>
+            <p>
+              설정집 기준으로 초반 공개 가능한 정보와 중후반 공개 정보를 분리했습니다.
+              공개 페이지는 입문용 톤을 유지하고, 엔딩·분기·핵심 진실은 공략 페이지로 격리했습니다.
+            </p>
           </div>
 
-          <article class="panel active" data-panel="begin">
-            <div class="section-title">
-              <span class="eyebrow">ORIENTATION 00</span>
-              <h2>신규 직원은 이것부터 확인하세요.</h2>
-              <p>
-                SHI는 밝고 안전한 근무 환경을 제공하며, 모든 직원의 정서 안정과 임무 적응을 지원합니다.
-                낯선 용어가 보여도 걱정하지 마세요. 담당 매니저가 필요한 순서대로 안내합니다.
-              </p>
-            </div>
-            <div class="grid three">
-              <section class="card">
-                <span class="badge">1 / 표면</span>
-                <h3>SHI는 인류를 지킵니다</h3>
-                <p>외부 세계는 무너졌고, Sugar High Industries는 Prism Barrier로 잔존 인류를 보호합니다.</p>
-                <div class="small">신규 직원 권한으로 열람 가능한 정보입니다.</div>
-              </section>
-              <section class="card">
-                <span class="badge">2 / 이상함</span>
-                <h3>캔디는 안정에 필요합니다</h3>
-                <p>복용은 복지처럼 보이지만, 점점 감시와 의존의 냄새가 납니다. 끊으면 문제가 생깁니다.</p>
-                <div class="small">“복용을 잊어도 매니저가 확인합니다.”</div>
-              </section>
-              <section class="card">
-                <span class="badge">3 / 임무</span>
-                <h3>하나만 의심하세요</h3>
-                <p>첫 장면에는 이상징후를 하나만 넣는 것이 좋습니다. 방송 오류, 사라진 선배, 경고문 같은 작은 균열이면 충분합니다.</p>
-                <div class="small">초반에는 진실보다 불편한 친절이 중요합니다.</div>
-              </section>
-            </div>
+          <div class="grid three">
+            <article class="card">
+              <span class="badge">PUBLIC LAYER</span>
+              <h3>밝은 기업 홍보물</h3>
+              <p>SHI는 인류 최후의 안전지대입니다. Candy는 정서 안정에 필요하며, 마법소녀는 도시를 지키는 직원입니다.</p>
+            </article>
+            <article class="card">
+              <span class="badge">DISCOMFORT LAYER</span>
+              <h3>친절한 관리 문장</h3>
+              <p>복용 주기, 감정 기여, 안정화 조치, 자연 퇴직 같은 단어가 반복됩니다. 문장은 안전하지만 내용은 조금씩 어긋납니다.</p>
+            </article>
+            <article class="card dark">
+              <span class="badge">LOCKED LAYER</span>
+              <h3>아직 열지 않는 정보</h3>
+              <p>Hollow, RECLAIM, BLIND SPOT, 퇴직자 기록의 실제 의미는 공략 페이지나 후반 플레이에서 확인하는 구조입니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
 
-            <div class="glitch-line">Everything is sweet. Everything is safe. Everything is almost true.</div>
-          </article>
+      <section class="section">
+        <div class="inner">
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">ENTRY MAP</span>
+              <h2>필요한 페이지부터 들어가면 됩니다.</h2>
+            </div>
+            <p>처음이면 `세계관 → 구역 → 세력 → 인물 → 시작` 순서가 가장 안정적입니다.</p>
+          </div>
 
-          <article class="panel" data-panel="world">
-            <div class="section-title">
-              <span class="eyebrow">WORLD ATLAS / SPOILER-LIGHT</span>
-              <h2>세계는 회사 안에 있습니다.</h2>
-              <p>
-                SHI는 도시이자 국가이자 경제권이자 세계입니다. Prism Barrier는 인류를 보호하지만,
-                그 유지비는 마법소녀에게서 추출되는 감정 에너지입니다.
-              </p>
-            </div>
-            <div class="grid three">
-              <section class="card">
-                <span class="badge">SHI</span>
-                <h3>세계 전체</h3>
-                <p>외부 문명은 없거나, 적어도 SHI 내부에서는 없는 것으로 취급됩니다. 회사가 곧 생활권입니다.</p>
-              </section>
-              <section class="card">
-                <span class="badge">PRISM BARRIER</span>
-                <h3>최후 방어선</h3>
-                <p>코즈믹 하수인의 침범을 막는 결계입니다. 멈추면 인류가 위험해지는 진짜 방어 인프라입니다.</p>
-              </section>
-              <section class="card">
-                <span class="badge">PRISM HAZE</span>
-                <h3>파스텔 필터</h3>
-                <p>공포, 시체, 잔재를 귀여운 위협으로 재해석하게 만드는 인식 왜곡 시스템입니다.</p>
-              </section>
-              <section class="card">
-                <span class="badge">CANDY</span>
-                <h3>안정과 통제</h3>
-                <p>마법소녀를 안정시키는 물질이지만, 동시에 복용 주기와 상태 확인을 통해 통제 장치로 작동합니다.</p>
-              </section>
-              <section class="card">
-                <span class="badge">HOLLOW</span>
-                <h3>공식 괴물</h3>
-                <p>공식적으로는 외부 괴물입니다. 다만 낮은 Haze에서는 목소리와 잔재가 이상하게 인간적입니다.</p>
-              </section>
-              <section class="card">
-                <span class="badge">NARRATIVE</span>
-                <h3>선악 대립 아님</h3>
-                <p>SHI에 남으면 인류는 당장 살지만 마법소녀는 소진됩니다. 탈출은 자유일 수 있지만 전멸일 수도 있습니다.</p>
-              </section>
-            </div>
-          </article>
+          <div class="grid four">
+            <a class="card" href="world.html">
+              <span class="badge">01 / WORLD</span>
+              <h3>세계관</h3>
+              <p>SHI, Prism Barrier, Prism Haze, Candy, Hollow의 공개 설정을 봅니다.</p>
+            </a>
+            <a class="card" href="districts.html">
+              <span class="badge">02 / CITY</span>
+              <h3>구역 안내</h3>
+              <p>Pink, Cyan, Silver, Black District와 이동망을 확인합니다.</p>
+            </a>
+            <a class="card" href="factions.html">
+              <span class="badge">03 / FACTIONS</span>
+              <h3>부서와 세력</h3>
+              <p>제과부, 특수작전부, 마케팅부, R&D, Luna Cell, NEU를 구분합니다.</p>
+            </a>
+            <a class="card" href="characters.html">
+              <span class="badge">04 / PEOPLE</span>
+              <h3>인물 기록</h3>
+              <p>마법소녀 직원 등록부를 열고 신분증 형식으로 인물을 확인합니다.</p>
+            </a>
+            <a class="card" href="start.html">
+              <span class="badge">05 / START</span>
+              <h3>시작 시나리오</h3>
+              <p>신규 입사자, 기억 손상 직원, R&D 테스트 대상 등 시작점을 고릅니다.</p>
+            </a>
+            <a class="card" href="test.html">
+              <span class="badge">06 / TEST</span>
+              <h3>적성 검사</h3>
+              <p>간단한 심리 테스트로 부서 적합도와 루트 성향을 확인합니다.</p>
+            </a>
+            <a class="card dark" href="guide.html">
+              <span class="badge">07 / SPOILER</span>
+              <h3>공략집</h3>
+              <p>엔딩, 루트 분기, 히든 조건을 포함합니다. 첫 플레이 중이면 나중에 여세요.</p>
+            </a>
+            <article class="card">
+              <span class="badge">NOTICE</span>
+              <h3>캔디는 제때 드셨나요?</h3>
+              <p>복용을 잊어도 걱정하지 마세요. 12시간 후부터 담당 매니저가 자동으로 확인합니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
 
-          <article class="panel" data-panel="city">
-            <div class="section-title">
-              <span class="eyebrow">CITY GUIDE MAP</span>
-              <h2>프리즘 돔 안의 수직·환형 도시</h2>
-              <p>중앙에는 Prism Spire Core가 있고, 주변 구역은 Pink, Cyan, Silver, Black으로 나뉩니다.</p>
+      <section class="section">
+        <div class="inner">
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">CORE TERMS</span>
+              <h2>처음 알아야 할 단어들.</h2>
             </div>
-            <div class="grid two">
-              <section class="map">
-                <div class="map-diagram">
-                  <div class="zone silver">SILVER DISTRICT<br />Executive / Broadcast / VIP</div>
-                  <div class="zone">PRISM SPIRE CORE</div>
-                  <div class="map-row">
-                    <div class="zone pink">PINK<br />Residential / Candy</div>
-                    <div class="zone">SUGAR LINE</div>
-                    <div class="zone cyan">CYAN<br />Commerce / Combat</div>
-                  </div>
-                  <div class="zone">MAINTENANCE VEINS</div>
-                  <div class="zone black">BLACK DISTRICT<br />Closed / Haze-collapse / Luna Cell</div>
-                </div>
-              </section>
-              <section class="grid">
-                <div class="card"><span class="badge">PINK</span><h3>신입 관리</h3><p>기숙사, 교육센터, 캔디 생산과 배급. 가장 안전하지만 가장 부드럽게 통제됩니다.</p><div class="small">Haze 90~100%</div></div>
-                <div class="card"><span class="badge">CYAN</span><h3>상업과 전투</h3><p>쇼핑몰, 훈련장, Hollow 진압 전선. 광고처럼 들리는 경보음이 납니다.</p><div class="small">Haze 70~85%</div></div>
-                <div class="card"><span class="badge">SILVER</span><h3>행정과 방송</h3><p>임원, PR, VIP 구역. 공식 위험도는 낮지만 제도적 위험은 가장 높습니다.</p><div class="small">Haze 95~100%</div></div>
-                <div class="card"><span class="badge">BLACK</span><h3>폐쇄구역</h3><p>Haze가 무너진 곳. Luna Cell과 비통제 Hollow, BLIND SPOT의 냄새가 납니다.</p><div class="small">공식 접근 없음</div></div>
-              </section>
-            </div>
-          </article>
+            <p>이 단어들은 세계관의 기본 언어입니다. 공개 페이지에서는 공식 설명과 이상징후까지만 다룹니다.</p>
+          </div>
 
-          <article class="panel" data-panel="people">
-            <div class="section-title">
-              <span class="eyebrow">CHARACTER & FACTION INDEX</span>
-              <h2>프로필보다 방어기제로 이해하세요.</h2>
-              <p>직원 정보는 공식 직책과 근무 성향을 중심으로 제공됩니다. 개인 의료 기록과 상세 상담 기록은 보호됩니다.</p>
-            </div>
-            <div class="grid three">
-              <section class="card character-card" style="--aura:rgba(255,114,182,.42)" data-secret="돌봄과 착취 집행이 같은 행동으로 나타납니다.">
-                <span class="badge">EXE-01 / Candice</span>
-                <h3>캔디스</h3>
-                <p>완벽한 친절의 매니저. 추출률, Candy 복용, 임무 성과를 모두 파악합니다.</p>
-                <div class="quote">“오늘 추출률이 정말 예쁘네요.”</div>
-              </section>
-              <section class="card character-card" style="--aura:rgba(255,114,182,.34)" data-secret="감정 영역 일부가 소실되었지만 본인은 그 공백을 모릅니다.">
-                <span class="badge">CON-01 / Berry</span>
-                <h3>베리</h3>
-                <p>밝고 순수한 신입. 인정받고 싶어 하며 멈추지 않을 때 공백을 느끼지 않습니다.</p>
-                <div class="quote">“선배님! 딸기 향이 나요!”</div>
-              </section>
-              <section class="card character-card" style="--aura:rgba(255,240,138,.5)" data-secret="퇴직자 파일을 찾으면 삶의 이유가 흔들립니다.">
-                <span class="badge">CON-02 / Chichi</span>
-                <h3>치치</h3>
-                <p>작고 뾰족한 신입. 부모의 실종과 퇴직 기록을 쫓기 위해 입사했습니다.</p>
-                <div class="quote">“그 파일 어디 있어요?”</div>
-              </section>
-              <section class="card character-card" style="--aura:rgba(102,218,250,.38)" data-secret="카메라가 켜진 상태와 꺼진 상태가 다릅니다.">
-                <span class="badge">MAR-01 / Bubble Pop</span>
-                <h3>버블 팝</h3>
-                <p>Sugar Idols 방송 출연자. 밝음은 선택이 아니라 생존 수행입니다.</p>
-                <div class="quote">“오늘도 완전 최고죠?”</div>
-              </section>
-              <section class="card character-card" style="--aura:rgba(255,216,236,.5)" data-secret="괜찮다는 말 말고 다른 말이 기억나지 않을 때 균열이 시작됩니다.">
-                <span class="badge">MAR-03 / Mellow</span>
-                <h3>멜로우</h3>
-                <p>Sugar Idols의 힐링 이미지 담당. 남을 달래는 데 익숙하지만 자기 감정은 점점 늦게 도착합니다.</p>
-                <div class="quote">“저는 괜찮아요.”</div>
-              </section>
-              <section class="card character-card" style="--aura:rgba(199,179,255,.42)" data-secret="데이터로 진실을 알고 있지만, 샘플이 되는 것을 두려워합니다.">
-                <span class="badge">RND-01 / Stitch</span>
-                <h3>스티치</h3>
-                <p>R&D 자원 연구원. 자신을 포함한 데이터를 추적합니다.</p>
-                <div class="quote">“이건 기준선으로 써도 돼요.”</div>
-              </section>
-              <section class="card character-card" style="--aura:rgba(20,9,30,.28)" data-secret="탈출은 가능할 수 있지만, 정보 출처가 안전하다는 보장은 없습니다.">
-                <span class="badge">SPE-01 / Luna</span>
-                <h3>루나</h3>
-                <p>Luna Cell의 리더. SHI 전복과 탈출을 시도하지만 대안은 검증되지 않았습니다.</p>
-                <div class="quote">“들키면 끝이에요.”</div>
-              </section>
-            </div>
-
-            <div class="grid four" style="margin-top:14px">
-              <section class="card"><span class="badge">SHI</span><h3>공식 질서</h3><p>결계, 배급, 기록, 퇴직, 검열을 관리합니다.</p></section>
-              <section class="card"><span class="badge">Luna Cell</span><h3>저항조직</h3><p>전복과 탈출을 시도하지만 실패하면 전멸할 수 있습니다.</p></section>
-              <section class="card"><span class="badge">Void Eater</span><h3>망각의 신호</h3><p>신앙처럼 보이지만 핵심은 죄책감 마취와 종속입니다.</p></section>
-              <section class="card"><span class="badge">NEU</span><h3>중립 행동자</h3><p>쿠토가 대표 인물. 선택하지 않는 선택도 개입이 됩니다.</p></section>
-            </div>
-            <div class="cta-row">
-              <a class="btn secondary" href="characters.html"><span>인사 기록 열람</span></a>
-            </div>
-          </article>
-
-          <article class="panel" data-panel="start">
-            <div class="section-title">
-              <span class="eyebrow">SCENARIO SELECTOR</span>
-              <h2>처음이면 A 루트가 제일 자연스럽습니다.</h2>
-              <p>희망 배치 유형을 선택하면 시작 위치와 안내 절차가 표시됩니다. 실제 배치는 담당 매니저 승인 후 확정됩니다.</p>
-            </div>
-            <div class="grid three" id="routes">
-              <section class="card route-card selected" data-route="A" data-title="신규 SHI 입사자" data-desc="Pink-1에서 임시 ID와 첫 Candy packet을 받고 오리엔테이션을 기다립니다. 복도 방송이 잠시 끊기거나, 캔디 포장지에 작은 경고문이 보일 수 있습니다. 해당 현상은 대부분 정서 보정 과정의 일부입니다.">
-                <span class="badge">A / LOW / Pink-1</span><h3>신규 SHI 입사자</h3><p>가장 안정적인 기본 배치입니다.</p>
-              </section>
-              <section class="card route-card" data-route="B" data-title="기억 손상 직원" data-desc="Sleep Pod Clinic에서 깨어납니다. 이미 직원이지만 기억 일부가 비어 있어, 기록과 모순을 따라가는 미스터리 루트에 강합니다.">
-                <span class="badge">B / MID / Clinic</span><h3>기억 손상 직원</h3><p>기억과 기록의 빈칸을 따라갑니다.</p>
-              </section>
-              <section class="card route-card" data-route="C" data-title="R&D 테스트 대상" data-desc="RND Sublevel에서 시작합니다. 시스템, Hollowing, RECLAIM의 냄새를 빠르게 체감하지만 초반부터 압박이 강합니다.">
-                <span class="badge">C / HIGH / RND</span><h3>R&D 테스트 대상</h3><p>시스템의 어두운 면을 빠르게 봅니다.</p>
-              </section>
-              <section class="card route-card" data-route="D" data-title="Sugar Idols 후보생" data-desc="방송과 PR 구역에서 시작합니다. 카메라 앞의 밝음과 카메라 밖의 자아 분리를 다루기 좋습니다.">
-                <span class="badge">D / MID / Silver-2</span><h3>Sugar Idols 후보생</h3><p>홍보, 방송, 정체성 붕괴에 적합합니다.</p>
-              </section>
-              <section class="card route-card" data-route="E" data-title="Luna Cell 접촉자" data-desc="Cyan-3 또는 Black-1에서 시작합니다. 저항 루트가 즉시 열리지만, 실패하면 손실이 큽니다.">
-                <span class="badge">E / HIGH / Black</span><h3>Luna Cell 접촉자</h3><p>진실 추적과 저항 루트를 바로 엽니다.</p>
-              </section>
-              <section class="card route-card" data-route="F" data-title="NEU 협력자" data-desc="Cyan 상업 블록 또는 폐쇄 옥상에서 쿠토와 연결됩니다. 중립 루트는 개입 타이밍과 책임의 애매함이 핵심입니다.">
-                <span class="badge">F / MID-HIGH / Cyan</span><h3>NEU 협력자</h3><p>선택하지 않는 선택의 무게를 다룹니다.</p>
-              </section>
-            </div>
-            <div class="route-detail" id="routeDetail">
-              <h3>신규 SHI 입사자</h3>
-              <p>Pink-1에서 임시 ID와 첫 Candy packet을 받고 오리엔테이션을 기다립니다. 복도 방송이 잠시 끊기거나, 캔디 포장지에 작은 경고문이 보일 수 있습니다. 해당 현상은 대부분 정서 보정 과정의 일부입니다.</p>
-            </div>
-          </article>
-
-          <article class="panel" data-panel="spoiler">
-            <div class="section-title">
-              <span class="eyebrow">CLASSIFIED / READ WHEN READY</span>
-              <h2>기록은 권한에 따라 열립니다.</h2>
-              <p>일부 자료는 직원의 정서 안정과 도시 보안을 위해 단계적으로 공개됩니다. 열람 권한이 부족한 항목은 담당 매니저에게 문의하세요.</p>
-            </div>
-            <div class="grid three spoiler-grid">
-              <section class="card">
-                <span class="badge">LEVEL 1 / 안내 가능</span>
-                <h3>안전한 표면</h3>
-                <p>SHI는 세계를 보호한다. Candy는 안정에 필요하다. Hollow는 위험하다. Prism Haze는 정서 안정 시스템이다.</p>
-              </section>
-              <section class="card">
-                <span class="badge">LEVEL 2 / 제한 기록</span>
-                <h3>균열</h3>
-                <p>Candy는 치료제가 아니라 지연 장치다. 추출률은 불가역이다. 퇴직자 기록에 공백이 있고 Hollow에 인간 잔재가 있다.</p>
-              </section>
-              <section class="card">
-                <span class="badge">LEVEL 3 / 임원 승인</span>
-                <h3>핵심 진실</h3>
-                <p>Hollow 다수는 전직 마법소녀다. SHI는 이를 알고 있다. RECLAIM은 선택적 회수/처분 시스템이다.</p>
-              </section>
-            </div>
-            <div class="glitch-line">Candy does not heal. Candy delays. The barrier is hungry.</div>
-          </article>
+          <div class="grid three">
+            <article class="card">
+              <span class="badge">SHI</span>
+              <h3>Sugar High Industries</h3>
+              <p>도시, 국가, 경제권, 방어 인프라가 한 회사로 합쳐진 구조입니다. SHI 밖의 세계는 공식적으로 확인되지 않습니다.</p>
+            </article>
+            <article class="card">
+              <span class="badge">BARRIER</span>
+              <h3>Prism Barrier</h3>
+              <p>코즈믹 하수인의 침범을 막는 최후 방어선입니다. 유지에는 지속적인 감정 에너지가 필요합니다.</p>
+            </article>
+            <article class="card">
+              <span class="badge">HAZE</span>
+              <h3>Prism Haze</h3>
+              <p>도시의 공포를 파스텔 판타지로 보이게 만드는 정서 안정 필터입니다. 농도가 낮아지면 색과 냄새가 바뀝니다.</p>
+            </article>
+            <article class="card">
+              <span class="badge">CANDY</span>
+              <h3>Candy System</h3>
+              <p>마법소녀의 Sanity를 안정시키는 지급품입니다. 복지처럼 보이지만 배급과 복용 기록이 함께 관리됩니다.</p>
+            </article>
+            <article class="card">
+              <span class="badge">HOLLOW</span>
+              <h3>Hollow</h3>
+              <p>공식적으로는 결계를 위협하는 외부 괴물입니다. 일부 보고서에는 이름, 습관, 목소리 같은 잔재가 기록됩니다.</p>
+            </article>
+            <article class="card">
+              <span class="badge">RETIREMENT</span>
+              <h3>자연 퇴직</h3>
+              <p>SHI가 사용하는 완곡어입니다. 관련 문의는 담당 매니저를 통해 접수됩니다.</p>
+            </article>
+          </div>
         </div>
       </section>
     </main>
@@ -1006,58 +193,16 @@
     <footer>
       <div class="footer-inner">
         <div>
-          <strong>Sugar High Industries protects everyone.</strong>
-          <p>오늘도 안전하고 달콤한 하루를 보내세요. 캔디 복용을 잊지 마세요.</p>
+          <strong>Sugar High Industries protects everyone.</strong><br />
+          오늘도 안전하고 달콤한 하루를 보내세요.
         </div>
-        <div class="fine">
-          퇴직자 관련 문의는 담당 매니저를 통해 접수해주세요.<br />
-          Black District 접근은 승인된 인원에 한해 가능합니다.<br />
-          [PRISM HAZE: ACTIVE] [CANDY TIMER: RUNNING] [HOLLOW FILE: REDACTED]
+        <div>
+          [PRISM HAZE: ACTIVE]<br />
+          [CANDY TIMER: RUNNING]<br />
+          [RETIREMENT FILE: ACCESS DENIED]
         </div>
       </div>
     </footer>
   </div>
-
-  <script>
-    const panels = document.querySelectorAll("[data-panel]");
-    const tabs = document.querySelectorAll("[data-tab-target]");
-    const portal = document.getElementById("portal");
-
-    function activateTab(name, scroll = true) {
-      panels.forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === name));
-      tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tabTarget === name));
-      if (scroll) portal.scrollIntoView({ behavior: "smooth", block: "start" });
-      history.replaceState(null, "", `#${name}`);
-    }
-
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => activateTab(tab.dataset.tabTarget));
-    });
-
-    const hashAliases = {
-      top: "begin",
-      intro: "begin",
-      candy: "world",
-      districts: "city",
-      departments: "people",
-      characters: "people",
-      scenarios: "start"
-    };
-
-    const rawHash = location.hash.replace("#", "");
-    const hash = hashAliases[rawHash] || rawHash;
-    if ([...panels].some((panel) => panel.dataset.panel === hash)) {
-      activateTab(hash, false);
-    }
-
-    const routeDetail = document.getElementById("routeDetail");
-    document.querySelectorAll(".route-card").forEach((card) => {
-      card.addEventListener("click", () => {
-        document.querySelectorAll(".route-card").forEach((item) => item.classList.remove("selected"));
-        card.classList.add("selected");
-        routeDetail.innerHTML = `<h3>${card.dataset.title}</h3><p>${card.dataset.desc}</p>`;
-      });
-    });
-  </script>
 </body>
 </html>
