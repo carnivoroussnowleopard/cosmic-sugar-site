@@ -1,5 +1,5 @@
 (function () {
-  const track = "sweet-prism-parade.wav";
+  const track = "sweet-prism-parade.mp3";
   const lyrics = `[Intro]
 Sugar! Sugar! Prism go!
 One, two, smile and glow!
